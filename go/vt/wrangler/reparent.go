@@ -359,7 +359,8 @@ func (wr *Wrangler) PlannedReparentShard(ctx context.Context, keyspace, shard st
 
 func (wr *Wrangler) UpdateReparentTimeNsShardRecord(ctx context.Context, keyspace, shard string, reparent_time_ns int64) (err error) {
 	_, err = wr.ts.UpdateShardFields(ctx, keyspace, shard, func(si *topo.ShardInfo) error {
-		return si.UpdateReparentTimeNs(ctx, reparent_time_ns)
+		si.ReparentTimeNs = reparent_time_ns
+		return nil
 	})
 
 	return
