@@ -357,9 +357,12 @@ func (wr *Wrangler) PlannedReparentShard(ctx context.Context, keyspace, shard st
 	return err
 }
 
-func (wr *Wrangler) UpdateReparentTimeNsShardRecord(ctx context.Context, keyspace, shard string, reparent_time_ns int64) (err error) {
+// UpdateReparentTimeNsShardRecord updates the ReparentTimeNs field in the shard record.
+// If this field is not 0, a reparenting started on the shard at the timestamp's value
+// and the reparenting is currently ongoing.
+func (wr *Wrangler) UpdateReparentTimeNsShardRecord(ctx context.Context, keyspace, shard string, reparentTimeNs int64) (err error) {
 	_, err = wr.ts.UpdateShardFields(ctx, keyspace, shard, func(si *topo.ShardInfo) error {
-		si.ReparentTimeNs = reparent_time_ns
+		si.ReparentTimeNs = reparentTimeNs
 		return nil
 	})
 
